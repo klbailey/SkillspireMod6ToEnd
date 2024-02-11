@@ -1,0 +1,1 @@
+# Gambling game. Create a Boxer class that has size, strength, wins and losses properties.
