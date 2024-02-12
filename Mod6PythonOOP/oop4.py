@@ -44,12 +44,15 @@ class Cheetah(BigCat):
   def run(self, anotherBigCat):
     # If it encounter's a Leopard run the Leopard's pounce method; leopard will pounce and decreases cheetah health by 15
     if isinstance(anotherBigCat, Leopard):
-      anotherBigCat.pounce()
+      if random.random() <= .60:
+        print('The cheetah is unscathed.')
+      else:
+        anotherBigCat.pounce(self) # refers to current run/attack
       # If it encounters the Lion run the Lion's king() method; anotherBigCat object performs king action which is
       # a method defined in Lion class and does things to another BigCat object like setting attributes to 
       # specific values in this case set to 0
     elif isinstance(anotherBigCat, Lion):
-      anotherBigCat.king(anotherBigCat)
+      anotherBigCat.king(self)
     # If the Cheetah runs away from any of its foes then they lose 20 points in health
     else:
       self.health -= 20  
@@ -62,48 +65,90 @@ class Leopard(BigCat):
     self.intelligence = 30
     self.health = 30
 
-  # Give Leopard a method king() that accepts BigCat object and sets attributes to 0
-  # def king(self, anotherBigCat):
-  #   anotherBigCat.speed = 0
-  #   anotherBigCat.strength = 0
-  #   anotherBigCat.intelligence = 0
-  #   anotherBigCat.health = 0
-  #   anotherBigCat.durability = 0
-
   def pounce(self, anotherBigCat):
     # If object is Lion, run Lion's king() function
     if isinstance(anotherBigCat, Lion):
       anotherBigCat.king(anotherBigCat)
-    else:
-      # If object is not Lion but a Cheetah, it should have a 60% chance of leaving unscathed.
-      if isinstance(anotherBigCat, Cheetah):
-        if random.random() <= .60:
-          print('The cheetah is unscathed.')
-        else:
-          anotherBigCat.health -= 15
-      else:
-        # If object is not lion, deplete health by 15 points
-        anotherBigCat.health -= 15
     
-# Create instance / interactions for BigCat 
+      # If object is not Lion but a Cheetah, it should have a 60% chance of leaving unscathed.
+    elif isinstance(anotherBigCat, Cheetah):
+      if random.random() <= .60:
+        print('The cheetah is unscathed.')
+      else:
+        anotherBigCat.health -= 15
+    else:
+      # If object is not lion, deplete health by 15 points
+      anotherBigCat.health -= 15
+    
+# Create instances / interactions for BigCat, Lion, Cheetah, Leopard
 # Must have instance if I want to print out the attributes of an instance of BigCat
 bigCatInstance = BigCat()
-print("Big Cat speed:", bigCatInstance.speed)
-print("Big Cat strength:", bigCatInstance.strength)
-print("Big Cat intelligence:", bigCatInstance.intelligence)
-print("Big Cat health:", bigCatInstance.health)
-print("Big Cat durability:", bigCatInstance.durability)
-
-# Create instance / interactions for Lion
 lionInstance = Lion()
-print("Lion speed:", lionInstance.speed)
-print("Lion strength:", lionInstance.strength)
-print("Lion intelligence:", lionInstance.intelligence)
-print("Lion health:", lionInstance.health)
-print("Lion durability:", lionInstance.durability) 
-
-# Create instance / interactions for Cheetah
 cheetahInstance = Cheetah()
-
-# Create instance / interactions for Leopard
 leopardInstance = Leopard()
+
+# Create a game where ALL objects get created and All their methods are used 
+''' Objects:
+bigCatInstance = BigCat()
+lionInstance = Lion()
+cheetahInstance = Cheetah()
+leopardInstance = Leopard()
+    Methods:
+__init__
+king
+run
+pounce
+'''
+
+# One random encounter between 2 cats
+# random choice will randomly select one item from a given list [lion, cheetah, or leopard]
+catOne = random.choice([lionInstance, cheetahInstance, leopardInstance])
+catTwo = random.choice([lionInstance, cheetahInstance, leopardInstance])
+
+# Are the two cats different? If not, keeps randomly choosing until they different
+while catOne is catTwo:
+  catTwo = random.choice([lionInstance, cheetahInstance, leopardInstance])
+
+# Simulate an encounter
+if isinstance(catOne, Cheetah):
+    catOne.run(catTwo)
+# If it's a Leopard, run the Leopard's pounce method
+elif isinstance(catOne, Leopard):
+    catOne.pounce(catTwo)
+# If it's a Lion, run the Lion's king() method
+elif isinstance(catOne, Lion):
+    catOne.king(catTwo)
+
+
+
+
+
+
+
+
+
+# Print updated health attributes after interactions
+print("Lion:", lionInstance.health)
+print("Cheetah:", cheetahInstance.health)
+print("Leopard:", leopardInstance.health)
+
+# Who is the winner with the highest health attribute
+allCats = [lionInstance, cheetahInstance, leopardInstance]
+# Initialize variables
+maxHealth = 0
+winner = None
+for cat in allCats:
+  if cat.health > maxHealth:
+    maxHealth = cat.health
+    winner = cat
+# Get type of winner (Lion, Cheetah, or Leopard) of the winner
+# Empty string to assign to winnerType
+winnerType = "Unknown"
+if isinstance(winner, Lion):
+  winnerType = "Lion"
+elif isinstance( winner, Cheetah):
+  winnerType = "Cheetah"
+elif isinstance(winner, Leopard):
+  winnerType = "Leopard"
+
+print("The winner is a", winnerType)
