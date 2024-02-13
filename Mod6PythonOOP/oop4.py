@@ -21,7 +21,7 @@ class Lion(BigCat):
     # If the object is a Cheetah then it should have a 60% chance of leaving unscathed. (Hint use a random number generator)
     if isinstance(anotherBigCat, Cheetah):
       #random.random() returns floating numbers between 0 and 1
-      if random.random() <= .60:
+      if random.random() >= .60:
         print('The cheetah was unscathed.')
       else:
         # Go to attack method
@@ -137,11 +137,6 @@ pounce
 catOne = random.choice([lionInstance, cheetahInstance, leopardInstance])
 remaining_cats = [cat for cat in [lionInstance, cheetahInstance, leopardInstance] if cat != catOne]
 catTwo = random.choice(remaining_cats)
-
-# Print the initial state
-# print("Initial state:")
-# print("INO ONLY Cat One:", catOne.__class__.__name__, "Health:", catOne.health)
-# print("INFO ONLY Cat Two:", catTwo.__class__.__name__, "Health:", catTwo.health)
 
 # Are the two cats different? If not, keeps randomly choosing until they different
 while catOne is catTwo:
