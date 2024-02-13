@@ -25,10 +25,10 @@ class Lion(BigCat):
         print('The cheetah was unscathed.')
       else:
         # Go to attack method
-        self.attack(anotherBigCat)
         anotherBigCat.damageApplied = True
+        self.attack(anotherBigCat)
     else:
-      # Set all attributes of the Cheetah to 0
+      # Set all attributes of anotherBigCat to 0
       anotherBigCat.speed = 0
       anotherBigCat.strength = 0
       anotherBigCat.intelligence = 0
@@ -44,7 +44,10 @@ class Lion(BigCat):
         anotherBigCat.health = 0
         anotherBigCat.durability = 0
     else:
-      print('The lion missed.')
+      # See if target is Cheetah and it it successfully escaped
+      # See if this stops printing 'the lion missed' all the time
+      if not isinstance(anotherBigCat, Cheetah) and anotherBigCat.damageApplied:
+        print('The lion missed.')
 
 # Create a Cheetah class inherits from BigCat class, set the Cheetah's speed to 75, and the rest of its attributes to 25
 class Cheetah(BigCat):
@@ -60,12 +63,17 @@ class Cheetah(BigCat):
     self.damageApplied = False
 
     # Give the Cheetah a method called run() that accepts a BigCat object.
-  def run(self, anotherBigCat):
+  def run(self, anotherBigCat, winningCat=None):
     # Reset the damageApplied flat at start of each encounter
     self.damageApplied = False
-    # If it encounter's a Leopard run the Leopard's pounce method; leopard will pounce and decreases cheetah health by 15
+
+    # Print the random value generated during the encounter
+    # encounter_random_value = random.random()
+    # print(f"Encounter Random Value: {encounter_random_value}")
+
+    # If it encounters a Leopard run the Leopard's pounce method; leopard will pounce and decreases cheetah health by 15
     if isinstance(anotherBigCat, Leopard):
-      if random.random() > 0.6 and not self.damageApplied:
+      if not self.damageApplied and random.random() > 0.6:
         print('The cheetah is unscathed.')
         self.damageApplied = True
       else:
@@ -75,6 +83,11 @@ class Cheetah(BigCat):
       # specific values in this case set to 0
     elif isinstance(anotherBigCat, Lion):
       anotherBigCat.king(self)
+      # Did lion win outside block?
+      if not self.damageApplied:
+        print('The cheetah is unscathed.')
+
+
       # If it encounters another Cheetah 
     elif isinstance(anotherBigCat, Cheetah):
       if not self.damageApplied:
@@ -82,13 +95,20 @@ class Cheetah(BigCat):
         self.health -= damageTaken
         print(f'The cheetah lost {damageTaken} health.')
         self.damageApplied = True
-    # If the Cheetah runs away from any of its foes then they lose 20 points in health
+
+      # Check to see if Cheetah won before printing message
+      if isinstance(winningCat, Cheetah) and not self.damageApplied:
+        print(f'The cheetah is unscathed.')
+      else:
+        print(f'The cheetah lost {damageTaken} health.')
+        
+      # If the Cheetah runs away from any of its foes then they lose 20 points in health
     else:
       if not self.damageApplied:
         damageTaken = 20
         self.health -= damageTaken
         print(f'The cheetah lost {damageTaken} health.')
-    
+      
 # Create a Leopard class that inherits from the BigCat class; set the Leopard's strength intelligence and health to 30
 class Leopard(BigCat):
   def __init__(self):
@@ -104,8 +124,9 @@ class Leopard(BigCat):
     
       # If object is not Lion but a Cheetah, it should have a 60% chance of leaving unscathed.
     elif isinstance(anotherBigCat, Cheetah):
-      if random.random() <= 0.6:
+      if anotherBigCat.damageApplied and random.random() <= 0.6:
         print('The cheetah is unscathed.')
+        anotherBigCat.damageApplied = True
       else:
         anotherBigCat.health -= 15
     else:
@@ -152,10 +173,6 @@ elif isinstance(catOne, Leopard):
 else:
     catOne.king(catTwo)
 
-# Print updated health attributes after interactions
-print("Cat One:", catOne.__class__.__name__, "Health:", catOne.health)
-print("Cat Two:", catTwo.__class__.__name__, "Health:", catTwo.health)
-
 # Determine the winner based on health
 if catOne.health > catTwo.health:
     winningCat = catOne
@@ -165,8 +182,21 @@ else:
 # Get the type of the winning cat
 winnerType = "Unknown"
 if isinstance(winningCat, Lion):
-    winnerType = "Lion"
+  winnerType = "Lion"
 elif isinstance(winningCat, Leopard):
-    winnerType = "Leopard"
+  winnerType = "Leopard"
+elif isinstance(winningCat, Cheetah):
+  winnerType = "Cheetah"
 
-print("The winner is a", winnerType)
+# Print updated health attributes after interactions
+print("Cat One:", catOne.__class__.__name__, "Health:", catOne.health)
+print("Cat Two:", catTwo.__class__.__name__, "Health:", catTwo.health)
+
+# Check if winning cat is a cheetah before printing unscathed message
+if isinstance(winningCat, Cheetah):
+  print("The winner is a", winnerType)
+  catOne.run(catTwo, winningCat)
+  if not catOne.damageApplied and not catTwo.damageApplied:
+    print('The cheetah is unscathed.')
+else:
+  print("The winner is a", winnerType)
