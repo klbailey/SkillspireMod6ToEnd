@@ -139,9 +139,9 @@ remaining_cats = [cat for cat in [lionInstance, cheetahInstance, leopardInstance
 catTwo = random.choice(remaining_cats)
 
 # Print the initial state
-print("Initial state:")
-print("INO ONLY Cat One:", catOne.__class__.__name__, "Health:", catOne.health)
-print("INFO ONLY Cat Two:", catTwo.__class__.__name__, "Health:", catTwo.health)
+# print("Initial state:")
+# print("INO ONLY Cat One:", catOne.__class__.__name__, "Health:", catOne.health)
+# print("INFO ONLY Cat Two:", catTwo.__class__.__name__, "Health:", catTwo.health)
 
 # Are the two cats different? If not, keeps randomly choosing until they different
 while catOne is catTwo:
