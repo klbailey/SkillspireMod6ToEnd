@@ -65,8 +65,9 @@ class Cheetah(BigCat):
     self.damageApplied = False
     # If it encounter's a Leopard run the Leopard's pounce method; leopard will pounce and decreases cheetah health by 15
     if isinstance(anotherBigCat, Leopard):
-      if random.random() <= 0.6:
+      if random.random() > 0.6 and not self.damageApplied:
         print('The cheetah is unscathed.')
+        self.damageApplied = True
       else:
         anotherBigCat.pounce(self) # refers to current run/attack
       # If it encounters the Lion run the Lion's king() method; anotherBigCat object performs king action which is
@@ -139,14 +140,12 @@ catTwo = random.choice(remaining_cats)
 
 # Print the initial state
 print("Initial state:")
-print("Cat One:", catOne.__class__.__name__, "Health:", catOne.health)
-print("Cat Two:", catTwo.__class__.__name__, "Health:", catTwo.health)
+print("INO ONLY Cat One:", catOne.__class__.__name__, "Health:", catOne.health)
+print("INFO ONLY Cat Two:", catTwo.__class__.__name__, "Health:", catTwo.health)
 
 # Are the two cats different? If not, keeps randomly choosing until they different
 while catOne is catTwo:
   catTwo = random.choice([lionInstance, cheetahInstance, leopardInstance])
-
-
 
 # Simulate an encounter
 if isinstance(catOne, Cheetah):
@@ -155,33 +154,24 @@ if isinstance(catOne, Cheetah):
 elif isinstance(catOne, Leopard):
     catOne.pounce(catTwo)
 # If it's a Lion, run the Lion's king() method
-elif isinstance(catOne, Lion):
+else:
     catOne.king(catTwo)
 
 # Print updated health attributes after interactions
-print("Lion:", lionInstance.health)
-print("Cheetah:", cheetahInstance.health)
-print("Leopard:", leopardInstance.health)
+print("Cat One:", catOne.__class__.__name__, "Health:", catOne.health)
+print("Cat Two:", catTwo.__class__.__name__, "Health:", catTwo.health)
 
-# Who is the winner with the highest health attribute
-allCats = [lionInstance, cheetahInstance, leopardInstance]
-# Initialize variables
-maxHealth = 0
-winner = None
-for cat in allCats:
-  # Chec health after encounter
-  currentHealth = cat.health
-  # Only consider non-cheetah cats for he winner
-  if not (isinstance(cat, Cheetah) and cat.damageApplied) and currentHealth > maxHealth:
-    maxHealth = currentHealth
-    winner = cat
+# Determine the winner based on health
+if catOne.health > catTwo.health:
+    winningCat = catOne
+else:
+    winningCat = catTwo
 
-# Get type of winner (Lion, or Leopard) of the winner
-# Empty string to assign to winnerType
+# Get the type of the winning cat
 winnerType = "Unknown"
-if isinstance(winner, Lion):
-  winnerType = "Lion"
-elif isinstance(winner, Leopard):
-  winnerType = "Leopard"
+if isinstance(winningCat, Lion):
+    winnerType = "Lion"
+elif isinstance(winningCat, Leopard):
+    winnerType = "Leopard"
 
 print("The winner is a", winnerType)
