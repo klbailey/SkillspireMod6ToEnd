@@ -21,7 +21,7 @@ class Lion(BigCat):
     # If the object is a Cheetah then it should have a 60% chance of leaving unscathed. (Hint use a random number generator)
     if isinstance(anotherBigCat, Cheetah):
       #random.random() returns floating numbers between 0 and 1
-      if random.random() >= .60:
+      if random.random() <= .60:
         print('The cheetah was unscathed.')
       else:
         # Go to attack method
@@ -71,10 +71,10 @@ class Cheetah(BigCat):
     # encounter_random_value = random.random()
     # print(f"Encounter Random Value: {encounter_random_value}")
 
-    # If it encounters a Leopard run the Leopard's pounce method; leopard will pounce and decreases cheetah health by 15
+    # If it encounters a Leopard run the Leopard's pounce method; leopard will pounce and decreases cheetah health by 15****
     if isinstance(anotherBigCat, Leopard):
-      if not self.damageApplied and random.random() > 0.6:
-        print('The cheetah is unscathed.')
+      if not self.damageApplied and random.random() <= 0.6:
+        # print('The cheetah is unscathed.')
         self.damageApplied = True
       else:
         anotherBigCat.pounce(self) # refers to current run/attack
@@ -84,8 +84,8 @@ class Cheetah(BigCat):
     elif isinstance(anotherBigCat, Lion):
       anotherBigCat.king(self)
       # Did lion win outside block?
-      if not self.damageApplied:
-        print('The cheetah is unscathed.')
+      # if not self.damageApplied:
+      #   print('The cheetah is unscathed.')
 
 
       # If it encounters another Cheetah 
@@ -97,10 +97,10 @@ class Cheetah(BigCat):
         self.damageApplied = True
 
       # Check to see if Cheetah won before printing message
-      if isinstance(winningCat, Cheetah) and not self.damageApplied:
-        print(f'The cheetah is unscathed.')
-      else:
-        print(f'The cheetah lost {damageTaken} health.')
+      # if isinstance(winningCat, Cheetah) and not self.damageApplied:
+      #   print(f'The cheetah is unscathed.')
+      # else:
+      #   print(f'The cheetah lost {damageTaken} health.')
         
       # If the Cheetah runs away from any of its foes then they lose 20 points in health
     else:
@@ -125,7 +125,7 @@ class Leopard(BigCat):
       # If object is not Lion but a Cheetah, it should have a 60% chance of leaving unscathed.
     elif isinstance(anotherBigCat, Cheetah):
       if anotherBigCat.damageApplied and random.random() <= 0.6:
-        print('The cheetah is unscathed.')
+        # print('The cheetah is unscathed.')
         anotherBigCat.damageApplied = True
       else:
         anotherBigCat.health -= 15
